@@ -1,0 +1,3 @@
+[run]
+source = web
+omit = web/test*

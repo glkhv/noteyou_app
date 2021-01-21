@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{request.static_url('web:static/style_notes.css')}}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>{{title}}</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="/"><img class="logo" src="../static/assets/logo.svg" alt="Note you"></a>
+                <nav class="nav">
+                    <a class="nav__link" href="/logout">Log out <img src="../static/assets/logout.svg" alt=""></a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="notes">
+        <div class="container">
+            <div class="notes__inner">
+                <h1 class="notes__title">
+                    All notes <!--<small>({{notes|count}})</small>-->
+                </h1>
+                <div class="notes__main">
+
+                    <aside class="notes__aside">
+                        <div class="notes__add">
+                            <a class="add__note" href="#" data-toggle="modal" data-target="#create"><img src="../static/assets/plus.svg" alt="">Create
+                                note</a>
+                        </div>
+                        <div class="notes__items">
+                            <ul class="nav nav-tabs" role="tablist">
+
+                                {% for note in notes %}
+
+                                {% if loop.first %}
+
+                                <li class="notes__item nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#home-{{note.id}}">
+                                        {{note.title}}
+                                        <p>{{note.text}}</p>
+                                    </a>
+                                </li>
+
+                                {% else %}
+
+                                <li class="notes__item nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#home-{{note.id}}">
+                                        {{note.title}}
+                                        <p>{{note.text}}</p>
+                                    </a>
+                                </li>
+
+                                {% endif %}
+
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    </aside>
+
+                    <div class="tab-content">
+
+
+                        {% for note in notes %}
+
+                            {% if loop.first %}
+
+                                <form class="notes__block tab-pane fade show active" id="home-{{note.id}}">
+                                    <div class="notes__block-title">
+                                        <h3>{{note.title}}</h3>
+                                        <div class="notes__block-save">
+                                            <button class="update"><img src="../static/assets/save.svg" alt="">Save changes</button>
+                                            <a href="#" class="delete"><img src="../static/assets/delete.svg" alt=""></a>
+                                        </div>
+                                    </div>
+                                    <div class="notes__block-text">
+                                        <p>{{note.text}}</p>
+                                    </div>
+                                    <input type="hidden" name="id" value="{{note.id}}">
+                                    <input type="hidden" name="title" value="{{note.title}}">
+                                    <input type="hidden" name="text" value="{{note.text}}">
+                                </form>
+
+                            {% else %}
+
+                                <form class="notes__block tab-pane fade" id="home-{{note.id}}">
+                                    <div class="notes__block-title">
+                                        <h3>{{note.title}}</h3>
+                                        <div class="notes__block-save">
+                                            <button class="update"><img src="../static/assets/save.svg" alt="">Save changes</button>
+                                            <a href="#" class="delete"><img src="../static/assets/dots.svg" alt=""></a>
+                                        </div>
+                                    </div>
+                                    <div class="notes__block-text">
+                                        <p>{{note.text}}</p>
+                                    </div>
+                                    <input type="hidden" name="id" value="{{note.id}}">
+                                    <input type="hidden" name="title" value="{{note.title}}">
+                                    <input type="hidden" name="text" value="{{note.text}}">
+                                </form>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="create">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="modal__inner">
+                        <form class="form__popup" action="/create" method="POST">
+                            <h2 class="popup__title">Create Note</h2>
+                            <div class="popup__group">
+                                <input class="form__input" type="text" name="title" placeholder="title">
+                            </div>
+                            <div class="popup__group">
+                                <input class="form__input" type="text" name="text" placeholder="Text">
+                            </div>
+                            <button class="form__button" type="submit">Create</button>
+                        </form>
+                        <img class="popup_image" src="../static/assets/popup_image.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="load">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <h1>Загрузка</h1>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.delete').on('click', function (e) {
+                e.preventDefault();
+                let note = $(this).parents('form');
+                let id = note.find("input[name=id]").val()
+                let title = $("a[href='#home-" + id + "']").parent();
+                let formData = note.serialize();
+
+                let firstTitle = $('.notes__item:first > .nav-link');
+                let firstNote = $('.notes__block:first');
+
+                $.ajax({
+                    type: "POST",
+                    url: "/delete",
+                    data: formData,
+                    beforeSend: function(){
+                        $('#load').modal('show');
+                    },
+                    success: function () {
+                        note.slideUp();
+                        title.slideUp();
+                        firstTitle.addClass('active');
+                        firstNote.addClass('show active');
+                    },
+                    complete: function () {
+                        setTimeout(function(){
+                            $('#load').modal('hide');
+                        }, 300);
+                    },
+                    error: function () {
+                        alert("Не удалено");
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.update').on('click', function (e) {
+                e.preventDefault();
+                let form = $(this).parents('form');
+
+                let formData = form.serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/update",
+                    data: formData,
+                    beforeSend: function(){
+                        $('#load').modal('show');
+                    },
+                    complete: function () {
+                        setTimeout(function(){
+                            $('#load').modal('hide');
+                        }, 300);
+                    },
+                    error: function(){
+                        alert("Произошла ошибка");
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+        $('form').on('mouseover', function () {
+
+            let text = $(this).find('p');
+            let title = $(this).find('h3');
+            let form = $(this);
+            let input1 = form.find("input[name=text]");
+            let input2 = form.find("input[name=title]");
+
+            text.on('mousedown', function (e) {
+
+                $(this).attr('contenteditable', 'true');
+
+                text.on('mouseout', function (e) {
+
+                    input1.val(text[0].innerText);
+                    $(this).removeAttr('contenteditable');
+
+                });
+
+            });
+
+            title.on('mousedown', function (e) {
+
+                $(this).attr('contenteditable', 'true');
+
+                title.on('mouseout', function (e) {
+
+                    input2.val(title[0].innerText);
+                    $(this).removeAttr('contenteditable');
+
+                });
+
+            });
+
+        });
+
+
+    </script>
+</body>
+
+</html>
