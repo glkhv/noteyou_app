@@ -41,6 +41,7 @@ ____
 - CSS
 - JS + AJAX
 - MySQL + SQLAlchemy
+- Python + Pyramid
 ____
 ### Этапы разработки
 #### Дизайн
