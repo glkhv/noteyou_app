@@ -44,7 +44,7 @@
 
                                 <li class="notes__item nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#home-{{note.id}}">
-                                        {{note.title}}
+                                        <h4>{{note.title}}</h4>
                                         <p>{{note.text}}</p>
                                     </a>
                                 </li>
@@ -53,7 +53,7 @@
 
                                 <li class="notes__item nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#home-{{note.id}}">
-                                        {{note.title}}
+                                        <h4>{{note.title}}</h4>
                                         <p>{{note.text}}</p>
                                     </a>
                                 </li>
@@ -83,10 +83,10 @@
                                     </div>
                                     <div class="notes__block-text">
                                         <p>{{note.text}}</p>
+                                        <input type="hidden" name="id" value="{{note.id}}">
+                                        <input type="hidden" name="title" value="{{note.title}}">
+                                        <input type="hidden" name="text" value="{{note.text}}">
                                     </div>
-                                    <input type="hidden" name="id" value="{{note.id}}">
-                                    <input type="hidden" name="title" value="{{note.title}}">
-                                    <input type="hidden" name="text" value="{{note.text}}">
                                 </form>
 
                             {% else %}
@@ -101,10 +101,10 @@
                                     </div>
                                     <div class="notes__block-text">
                                         <p>{{note.text}}</p>
+                                        <input type="hidden" name="id" value="{{note.id}}">
+                                        <input type="hidden" name="title" value="{{note.title}}">
+                                        <input type="hidden" name="text" value="{{note.text}}">
                                     </div>
-                                    <input type="hidden" name="id" value="{{note.id}}">
-                                    <input type="hidden" name="title" value="{{note.title}}">
-                                    <input type="hidden" name="text" value="{{note.text}}">
                                 </form>
 
                             {% endif %}
@@ -201,6 +201,10 @@
             $('.update').on('click', function (e) {
                 e.preventDefault();
                 let form = $(this).parents('form');
+                let id = form.find("input[name=id]").val();
+                let formTitle = form.find("input[name=title]").val();
+                let formText = form.find("input[name=text]").val();
+                let link = $("a[href='#home-" + id + "']");
 
                 let formData = form.serialize();
 
@@ -215,6 +219,8 @@
                         setTimeout(function(){
                             $('#load').modal('hide');
                         }, 300);
+                        link.find('h4')[0].innerText = formTitle;
+                        link.find('p')[0].innerText = formText;
                     },
                     error: function(){
                         alert("Произошла ошибка");
@@ -238,7 +244,7 @@
 
                 $(this).attr('contenteditable', 'true');
 
-                text.on('mouseout', function (e) {
+                form.on('mouseout', function (e) {
 
                     input1.val(text[0].innerText);
                     $(this).removeAttr('contenteditable');
@@ -251,7 +257,7 @@
 
                 $(this).attr('contenteditable', 'true');
 
-                title.on('mouseout', function (e) {
+                form.on('mouseout', function (e) {
 
                     input2.val(title[0].innerText);
                     $(this).removeAttr('contenteditable');
