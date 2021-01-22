@@ -269,12 +269,24 @@ h6 {
 }
 
 .notes__item a {
+  padding-bottom: 5px;
+  transition: 0.3s;
+  color: #212121;
+}
+
+.notes__item a h4 {
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
-  color: #212121;
-  padding-bottom: 5px;
-  transition: 0.3s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  line-clamp: 1;
+  box-orient: vertical;
 }
 
 .notes__item a p {
@@ -293,7 +305,6 @@ h6 {
   line-clamp: 2;
   box-orient: vertical;
 }
-
 .notes__block {
   padding: 30px 25px 15px 40px;
   background: #f8f8f8;
@@ -347,6 +358,7 @@ h6 {
   font-size: 24px;
   line-height: 28px;
   padding: 8px 8px 8px 0;
+  max-width: 540px;
   color: #212121;
   transition: all 0.3s;
   word-break: break-all;
