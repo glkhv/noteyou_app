@@ -6,6 +6,7 @@ production.ini
 pytest.ini
 setup.py
 web/__init__.py
+web/check_session.py
 web/models.py
 web/routes.py
 web/tests.py
@@ -29,7 +30,11 @@ web/templates/404.jinja2
 web/templates/add.jinja2
 web/templates/index.jinja2
 web/templates/layout.jinja2
+web/templates/log_in_form.html
+web/templates/log_in_nav.html
 web/templates/mytemplate.jinja2
+web/templates/not_log_in_form.html
+web/templates/not_log_in_nav.html
 web/templates/notes.jinja2
 web/templates/sign-up.jinja2
 web/templates/users.jinja2
